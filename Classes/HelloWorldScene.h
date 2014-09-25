@@ -64,4 +64,24 @@ public:
     CREATE_FUNC(HelloWorld);
 };
 
+
+/**********************************************************************
+ *           CardSprite
+ **********************************************************************/
+
+class CardSprite : public cocos2d::Sprite
+{
+protected:
+    std::string getFileName(CardType cardType);//表画像ファイル名収得
+    void showNumber();//カードのマークと数字を表示
+    
+public:
+    virtual bool init();//初期か処理
+    void onEnter() override;//表示前処理
+    CREATE_FUNC(CardSprite);//create関数作成マクロ
+    
+    CC_SYNTHESIZE(Card, _card, Card);//カード情報
+    CC_SYNTHESIZE(PosIndex, _posIndex, PosIndex);//表示位置
+};
+
 #endif // __HELLOWORLD_SCENE_H__

@@ -2,6 +2,10 @@
 
 USING_NS_CC;
 
+/**********************************************************************
+*           HelloWorld
+**********************************************************************/
+
 Scene* HelloWorld::createScene()
 {
     //シーンを作成する。
@@ -66,9 +70,9 @@ Card HelloWorld::getCard()
 void HelloWorld::createCard(PosIndex posIndex)
 {
     //新しいカードを作成する
-    auto card = Sprite::create("card_spades.png");
-    card->setPosition(CARD_1_POS_X + CARD_DISTANCE_X * posIndex.x,
-                      CARD_1_POS_Y + CARD_DISTANCE_Y * posIndex.y);
+    auto card = CardSprite::create();
+    card->setCard(getCard());
+    card->setPosIndex(posIndex);
     addChild(card, ZORDER_SHOW_CARD);
 }
 
@@ -102,3 +106,82 @@ void HelloWorld::initGame()
     
     showInitCards();
 }
+
+
+/**********************************************************************
+ *           CardSprite
+ **********************************************************************/
+
+bool CardSprite::init()
+{
+    if (!Sprite::init())
+    {
+        return false;
+    }
+    return true;
+}
+
+void CardSprite::onEnter()
+{
+    Sprite::onEnter();
+    
+    //画像の表示
+    setTexture(getFileName(_card.type));
+    
+    //マークと数字の表示
+    showNumber();
+    
+    //カード位置とタグを指定
+    float posX = CARD_1_POS_X + CARD_DISTANCE_X * _posIndex.x;
+    float posY = CARD_1_POS_Y + CARD_DISTANCE_Y * _posIndex.y;
+    setPosition(posX, posY);
+    setTag(_posIndex.x + _posIndex.y * 5 +1);
+}
+
+std::string CardSprite::getFileName(CardType cardType)
+{
+    std::string filename;
+    switch (cardType) {
+        case Clubs: filename = "card_clubs.png"; break;
+        case Diamonds: filename = "card_diamonds.png"; break;
+        case Hearts: filename = "card_hearts.png"; break;
+        default:    filename = "card_spades.png"; break;
+    }
+    
+    return filename;
+}
+
+void CardSprite::showNumber()
+{
+    //表示する数字の収得
+    std::string numberString;
+    switch (_card.number) {
+        case 1:  numberString = "A"; break;
+        case 11: numberString = "J"; break;
+        case 12: numberString = "Q"; break;
+        case 13: numberString = "K"; break;
+        default: numberString = StringUtils::format("%d", _card.number);  break;
+    }
+    
+    //表示する文字の収得
+    Color4B textColor;
+    switch (_card.type) {
+        case Clubs:
+        case Spades:
+            textColor = Color4B::BLACK;
+            break;
+            
+        case Diamonds:
+        case Hearts:
+            textColor = Color4B::RED;
+            break;
+    }
+    
+    //ラベルの生成
+    auto number = Label::createWithSystemFont(numberString, "Arial", 96);
+    number->setPosition((Point(getContentSize() / 2)));
+    number->setTextColor(textColor);
+    addChild(number);
+}
+
+
