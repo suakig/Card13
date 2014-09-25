@@ -26,6 +26,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
 
+    // 画面全体が表示できるように画像を伸縮させる
+    glview->setDesignResolutionSize(960, 640, ResolutionPolicy::SHOW_ALL);
+    
     // create a scene. it's an autorelease object
     auto scene = HelloWorld::createScene();
 
