@@ -2,6 +2,7 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include "extensions/cocos-ext.h"
 #include <random>
 
 #define CARD_NUM 13//１種類あたりのカードの枚数
@@ -78,6 +79,11 @@ protected:
     void showInitCards();//ゲーム開始時にカードを10枚表示する。
     void initGame();//ゲームを初期化する。
     CardSprite* getTouchCard(cocos2d::Touch *touch);//タップされたカードを収得
+    
+    void showButton();//ボタンを表示する
+    void initTrash();//ゴミカードを初期化する
+    void onTapButton(cocos2d::Ref* sender, cocos2d::extension::Control::EventType controlEvent);//ボタンがタップされたときに呼ばれる。
+    void showBackCards();//カードの山を表示する
 
 public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
