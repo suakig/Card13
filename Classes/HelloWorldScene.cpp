@@ -4,29 +4,22 @@ USING_NS_CC;
 
 Scene* HelloWorld::createScene()
 {
-    // 'scene' is an autorelease object
     //シーンを作成する。
     auto scene = Scene::create();
     
-    // 'layer' is an autorelease object
     //HelloWorldレイヤーを作成する。
     auto layer = HelloWorld::create();
 
-    // add layer as a child to scene
     //シーンに対してレイヤーを追加する。
     scene->addChild(layer);
 
-    // return the scene
     //シーンを返す。
     return scene;
 }
 
-// on "init" you need to initialize your instance
 //HelloWorldクラスのレイヤーの初期か処理を行う
 bool HelloWorld::init()
 {
-    //////////////////////////////
-    // 1. super init first
     if ( !Layer::init() )
     {
         return false;
@@ -85,16 +78,19 @@ void HelloWorld::showInitCards()
     {
         auto card = getChildByTag(tag);
         if (card) {
+            //カードが残っている場合は削除
             card->removeFromParent();
         }
     }
     
+    //5列 x 2行分の行列
     for (int x = 0; x < 5; x++) {
         for (int y = 0; y < 2; y++) {
             PosIndex posIndex;
             posIndex.x = x;
             posIndex.y = y;
             
+            //カードの作成
             createCard(posIndex);
         }
     }
