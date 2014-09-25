@@ -39,32 +39,6 @@ struct PosIndex{
 };
 
 
-class HelloWorld : public cocos2d::Layer
-{
-protected:
-    std::vector<Card> _cards;//カード情報
-    
-    void initCards();//カードを初期化する
-    Card getCard();//カードを習得する
-    void createCard(PosIndex posIndex);//カードを生成
-    void showInitCards();//ゲーム開始時にカードを10枚表示する。
-    void initGame();//ゲームを初期化する。
-    
-public:
-    // there's no 'id' in cpp, so we recommend returning the class instance pointer
-    //HelloWorldクラスのシーンを作成する。
-    static cocos2d::Scene* createScene();
-
-    // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
-    //初期か処理を行う
-    virtual bool init();
-    
-    // implement the "static create()" method manually
-    //create関数作成マクロ
-    CREATE_FUNC(HelloWorld);
-};
-
-
 /**********************************************************************
  *           CardSprite
  **********************************************************************/
@@ -83,5 +57,45 @@ public:
     CC_SYNTHESIZE(Card, _card, Card);//カード情報
     CC_SYNTHESIZE(PosIndex, _posIndex, PosIndex);//表示位置
 };
+
+/**********************************************************************
+ *           HelloWorld
+ **********************************************************************/
+
+class HelloWorld : public cocos2d::Layer
+{
+protected:
+    std::vector<Card> _cards;//カード情報
+    CardSprite* _firstCard;//最初にタップされたカード
+    
+    void initCards();//カードを初期化する
+    Card getCard();//カードを習得する
+    void createCard(PosIndex posIndex);//カードを生成
+    void showInitCards();//ゲーム開始時にカードを10枚表示する。
+    void initGame();//ゲームを初期化する。
+    CardSprite* getTouchCard(cocos2d::Touch *touch);//タップされたカードを収得
+
+public:
+    // there's no 'id' in cpp, so we recommend returning the class instance pointer
+    //HelloWorldクラスのシーンを作成する。
+    static cocos2d::Scene* createScene();
+
+    // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
+    //初期か処理を行う
+    virtual bool init();
+    
+    // implement the "static create()" method manually
+    //create関数作成マクロ
+    CREATE_FUNC(HelloWorld);
+    
+    //タップイベント
+    virtual bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *unused_event);
+    virtual void onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *unused_event);
+    virtual void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *unused_event);
+    virtual void onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *unused_event);
+};
+
+
+
 
 #endif // __HELLOWORLD_SCENE_H__

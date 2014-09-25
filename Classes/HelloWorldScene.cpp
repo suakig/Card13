@@ -29,6 +29,20 @@ bool HelloWorld::init()
         return false;
     }
     
+    //シングルタップイベント収得
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->setSwallowTouches(_swallowsTouches);
+    
+    //イベント関数の割当
+    listener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
+    listener->onTouchMoved = CC_CALLBACK_2(HelloWorld::onTouchMoved, this);
+    listener->onTouchEnded = CC_CALLBACK_2(HelloWorld::onTouchEnded, this);
+    listener->onTouchCancelled= CC_CALLBACK_2(HelloWorld::onTouchCancelled, this);
+    
+    //イベントを追加する
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+    
+    //ゲームを初期化する
     initGame();
     
     return true;
@@ -107,6 +121,52 @@ void HelloWorld::initGame()
     showInitCards();
 }
 
+CardSprite* HelloWorld::getTouchCard(Touch *touch)
+{
+    for (int tag = 1; tag <= 10; tag++) {
+        //表示されているカードを収得する
+        auto card = (CardSprite*)getChildByTag(tag);
+        if (card && card->getBoundingBox().containsPoint(touch->getLocation()))
+        {
+            return card;
+        }
+    }
+    return nullptr;
+}
+
+bool HelloWorld::onTouchBegan(Touch *touch, Event *unused_event)
+{
+    //タップされたカードを収得する
+    _firstCard = getTouchCard(touch);
+    if (_firstCard) {
+        //場に出ているカードがタップされた場合
+        
+        //Zオーダーを変更する
+        _firstCard->setLocalZOrder(ZORDER_SHOW_CARD);
+        
+        return true;
+    }
+    
+    return false;
+}
+
+void HelloWorld::onTouchMoved(Touch *touch, Event *unused_event)
+{
+    //スワイプしているカードの位置を変更
+    _firstCard->setPosition(_firstCard->getPosition() + touch->getDelta());
+}
+
+void HelloWorld::onTouchEnded(Touch *touch, Event *unused_event)
+{
+    //タップしているカードの指定を外す
+    _firstCard = nullptr;
+}
+
+void HelloWorld::onTouchCancelled(Touch *touch, Event *unused_event)
+{
+    //タップ終了と同じ処理を行う
+    onTouchEnded(touch, unused_event);
+}
 
 /**********************************************************************
  *           CardSprite
