@@ -56,6 +56,10 @@ public:
     
     CC_SYNTHESIZE(Card, _card, Card);//カード情報
     CC_SYNTHESIZE(PosIndex, _posIndex, PosIndex);//表示位置
+    
+    void moveBackTOInitPos();//元の位置に移動する
+    void moveToTrash(); //カードを捨てる
+    void moveToInitPos();//最初の位置に移動する
 };
 
 /**********************************************************************
