@@ -72,6 +72,7 @@ class HelloWorld : public cocos2d::Layer
 protected:
     std::vector<Card> _cards;//カード情報
     CardSprite* _firstCard;//最初にタップされたカード
+    float _timer; //経過時間
     
     void initCards();//カードを初期化する
     Card getCard();//カードを習得する
@@ -84,6 +85,7 @@ protected:
     void initTrash();//ゴミカードを初期化する
     void onTapButton(cocos2d::Ref* sender, cocos2d::extension::Control::EventType controlEvent);//ボタンがタップされたときに呼ばれる。
     void showBackCards();//カードの山を表示する
+    void showTimerLabel();//時間経過を表示
 
 public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
@@ -103,6 +105,9 @@ public:
     virtual void onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *unused_event);
     virtual void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *unused_event);
     virtual void onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *unused_event);
+    
+    //毎フレーム呼ばれる関数
+    void update(float dt) override;
 };
 
 
